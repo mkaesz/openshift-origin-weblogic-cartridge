@@ -16,7 +16,7 @@ password=welcome1
 echo "username=$username" > ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
 echo "password=$password" >> ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
 
-echo $username > ${OPENSHIFT_WEBLOGIC_DIR}env/OPENSHIFT_WEBLOGIC_ADMIN_USER
+echo $username > ${OPENSHIFT_WEBLOGIC_DIR}env/OPENSHIFT_WEBLOGIC_ADMIN_USERNAME
 echo $password > ${OPENSHIFT_WEBLOGIC_DIR}env/OPENSHIFT_WEBLOGIC_ADMIN_PASSWORD
 
 
