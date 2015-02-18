@@ -7,7 +7,7 @@ export STOPTIMEOUT=60
 export APPSERVER="weblogic"
 
 
-function deploy() {
+function build() {
   echo
 }
 
