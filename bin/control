@@ -6,6 +6,11 @@ export PATH=${OPENSHIFT_WEBLOGIC_PROFILE}/bin:${PATH}
 export STOPTIMEOUT=60
 export APPSERVER="weblogic"
 
+
+function deploy() {
+  echo
+}
+
 function deploy() {
   echo 
 }
