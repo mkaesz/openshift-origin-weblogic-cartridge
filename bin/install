@@ -10,8 +10,15 @@ mkdir -p ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/Admi
 ${OPENSHIFT_WEBLOGIC_HOME}configure.sh -silent
 ${OPENSHIFT_WEBLOGIC_HOME}wlserver/common/bin/wlst.sh -skipWLSModuleScanning ${OPENSHIFT_WEBLOGIC_DIR}container-scripts/create-wls-domain.py
 
-echo "username=weblogic" > ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
-echo "password=${OPENSHIFT_WEBLOGIC_ADMIN_PASSWORD}" >> ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
+username=weblogic
+password=welcome1
+
+echo "username=$username" > ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
+echo "password=$password" >> ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
+
+echo $username > ${OPENSHIFT_WEBLOGIC_DIR}env/OPENSHIFT_WEBLOGIC_ADMIN_USER
+echo $password > ${OPENSHIFT_WEBLOGIC_DIR}env/OPENSHIFT_WEBLOGIC_ADMIN_PASSWORD
+
 
 echo ". ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/bin/setDomainEnv.sh" >> ${OPENSHIFT_WEBLOGIC_DIR}.bashrc
 echo "export PATH=$PATH:${OPENSHIFT_WEBLOGIC_HOME}wlserver/common/bin:${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/bin" >> ${OPENSHIFT_WEBLOGIC_DIR}.bashrc
