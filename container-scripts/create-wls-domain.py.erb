@@ -29,7 +29,8 @@ cmo.setClientCertificateEnforced(false)
 # =====================================
 cd('/')
 cd('Security/base_domain/User/<%= ENV['OPENSHIFT_WEBLOGIC_ADMIN_USERNAME'] %>')
-cmo.setPassword('<%= ENV['OPENSHIFT_WEBLOGIC_ADMIN_PASSWORD'] %>')
+cmo.setPassword('welcome1')
+#cmo.setPassword('<%= ENV['OPENSHIFT_WEBLOGIC_ADMIN_PASSWORD'] %>')
 # Please set password here before using this script, e.g. cmo.setPassword('value')
 
 # Create a JMS Server
