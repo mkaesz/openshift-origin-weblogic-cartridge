@@ -12,25 +12,21 @@ function deploy() {
 
 function is_running() {
   echo '>>> Processing action "IS_RUNNING"...'
-  pidfile=${OPENSHIFT_WEBLOGIC_PROFILE}/logs/${OPENSHIFT_WEBLOGIC_SERVERNAME}/${OPENSHIFT_WEBLOGIC_SERVERNAME}.pid
-
-  if [ -f $pidfile ]; then
-    pid=`cat $pidfile 2> /dev/null`
+  pid=$( ps -elf | grep weblogic.Name=AdminServer | grep -v "grep" | cut -d" " -f9 )
 
     if `ps --pid $pid > /dev/null 2>&1`
     then
       return 0
+    else
+      return 1
     fi
-  fi
-
-  return 1
 }
 
 function start() {
   echo '>>> Processing action "START"...'
   if ! is_running; then
     echo "Starting ${OPENSHIFT_WEBLOGIC_SERVERNAME} using: startWebLogic.sh"
-    ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/bin/startWebLogic.sh
+    ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/bin/startWebLogic.sh &
 
   else
     echo "${APPSERVER} already running." 1>&2
