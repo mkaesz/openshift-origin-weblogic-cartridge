@@ -1,0 +1,90 @@
+#!/bin/bash -e
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+export PATH=${OPENSHIFT_WEBLOGIC_PROFILE}/bin:${PATH}
+export STOPTIMEOUT=60
+export APPSERVER="weblogic"
+
+function deploy() {
+  echo 
+}
+
+function is_running() {
+  echo '>>> Processing action "IS_RUNNING"...'
+  pidfile=${OPENSHIFT_WEBLOGIC_PROFILE}/logs/${OPENSHIFT_WEBLOGIC_SERVERNAME}/${OPENSHIFT_WEBLOGIC_SERVERNAME}.pid
+
+  if [ -f $pidfile ]; then
+    pid=`cat $pidfile 2> /dev/null`
+
+    if `ps --pid $pid > /dev/null 2>&1`
+    then
+      return 0
+    fi
+  fi
+
+  return 1
+}
+
+function start() {
+  echo '>>> Processing action "START"...'
+  if ! is_running; then
+    echo "Starting ${OPENSHIFT_WEBLOGIC_SERVERNAME} using: startWebLogic.sh"
+    ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/bin/startWebLogic.sh
+
+  else
+    echo "${APPSERVER} already running." 1>&2
+  fi
+}
+
+function stop() {
+  echo '>>> Processing action "STOP"...'
+  if is_running; then
+    if [ -f $pidfile ]; then
+      pid=$( ps -elf | grep weblogic.Name=AdminServer | grep -v "grep" | cut -d" " -f9 )
+      echo "Stopping ${APPSERVER} process with PID ${pid}..."
+      /bin/kill $pid
+      ret=$?
+      if [ $ret -eq 0 ]; then
+        TIMEOUT="$STOPTIMEOUT"
+        while [ $TIMEOUT -gt 0 ] && [ -f "$pidfile" ]
+        do
+          /bin/kill -0 "$pid" >/dev/null 2>&1 || break
+          sleep 1
+          let TIMEOUT=${TIMEOUT}-1
+        done
+      fi
+    else
+      echo "${APPSERVER} already stopped." 1>&2
+    fi
+  fi
+}
+
+function restart() {
+  echo '>>> Processing action "RESTART"...'
+    stop
+    start
+}
+
+function status () {
+  echo '>>> Processing action "STATUS"...'
+  if is_running; then
+    client_result "${APPSERVER} is running."
+  else
+    client_result "${APPSERVER} is stopped."
+  fi
+
+  exit 0
+}
+
+case "$1" in
+  build)           build ;;
+  deploy)          deploy ;;
+  start)           start ;;
+  stop)            stop;;
+  status)          status;;
+  restart)         restart;;
+esac
+
+echo '<<<'
+echo ''

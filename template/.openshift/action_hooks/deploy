@@ -1,0 +1,2 @@
+rm -rf ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/autodeploy/*
+cp ${OPENSHIFT_REPO_DIR}deployment/* ${OPENSHIFT_WEBLOGIC_DIR}user_projects/domains/base_domain/autodeploy/
